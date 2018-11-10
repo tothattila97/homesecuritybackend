@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeSecurity.Web", "HomeSecurity.Web\HomeSecurity.Web.csproj", "{2C9C6016-6107-42F8-BD08-A82C8AD1AA04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeSecurity.Bll", "HomeSecurity.Bll\HomeSecurity.Bll.csproj", "{FC45FB40-1A82-4128-A3C8-B7F0440DEC0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2C9C6016-6107-42F8-BD08-A82C8AD1AA04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C9C6016-6107-42F8-BD08-A82C8AD1AA04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C9C6016-6107-42F8-BD08-A82C8AD1AA04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC45FB40-1A82-4128-A3C8-B7F0440DEC0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC45FB40-1A82-4128-A3C8-B7F0440DEC0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC45FB40-1A82-4128-A3C8-B7F0440DEC0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC45FB40-1A82-4128-A3C8-B7F0440DEC0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
