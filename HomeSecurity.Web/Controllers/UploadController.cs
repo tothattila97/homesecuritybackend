@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace HomeSecurity.Web.Controllers
 {
@@ -11,36 +12,20 @@ namespace HomeSecurity.Web.Controllers
     [ApiController]
     public class UploadController : ControllerBase
     {
-        // GET: api/Upload
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        public IConfiguration Configuration { get; }
 
-        // GET: api/Upload/5
-        [HttpGet("{id}", Name = "GetUpload")]
-        public string Get(int id)
+        public UploadController(IConfiguration configuration)
         {
-            return "value";
+            Configuration = configuration;
         }
-
-        // POST: api/Upload
+        
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task UploadImage()
         {
-        }
+            var accountName = Configuration.GetSection("AzureStorageConfig").GetValue<string>("AccountName");
+            var accountKey = Configuration.GetSection("AzureStorageConfig").GetValue<string>("AccountKey");
 
-        // PUT: api/Upload/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            
         }
     }
 }

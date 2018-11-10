@@ -7,25 +7,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeSecurity.Web.Controllers
 {
-    [Produces("application/json")]
-    [Consumes("application/json")]
-    [Route("api/account/[action]")]
-    [ApiController]
+    //[Route("api/Account")]
     public class AccountController : Controller
     {
-        
         public IActionResult Login()
-        {
-            return View();
-        }
-
-        public IActionResult Register()
         {
             return View();
         }
 
         public IActionResult Logout()
         {
+        
+
+            return View();
+        }
+
+        public IActionResult Register()
+        {
+
             return View();
         }
     }

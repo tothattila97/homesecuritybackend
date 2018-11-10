@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,11 +55,12 @@ namespace HomeSecurity.Web
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Identity/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
 
+            //services.AddSingleton<IConfiguration>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -67,7 +69,6 @@ namespace HomeSecurity.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -115,9 +116,9 @@ namespace HomeSecurity.Web
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
+                /*routes.MapRoute(
                     name: "identity",
-                    template: "{controller=Account}/{action=Login}/{id?}");
+                    template: "{controller=Account}/{action=Login}/{id?}");*/
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
