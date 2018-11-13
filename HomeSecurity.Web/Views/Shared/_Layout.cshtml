@@ -26,23 +26,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <!--<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">HomeSecurity</a>-->
-                <a href="/Home/Index" title="HomeSecurity" class="navbar-brand">HomeSecurity</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">HomeSecurity</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/Home/Index">Index</a></li>
-                    <li><a href="/Home/Contact">Contact</a></li>
-                    <li><a href="/Home/About">About</a></li>
-                    <!--<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>-->
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a asp-page="/Account/Login" title="Bejelentkezés"> <i class="glyphicon glyphicon-log-in"></i></a></li>
-                    <li><a asp-page="/Account/Register">Regisztráció</a></li>
-                    <li><a asp-page="/Account/Logout" title="Kijelentkezés"><i class="glyphicon glyphicon-log-out"></i></a></li>
-                </ul>
+                <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>
