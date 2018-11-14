@@ -23,12 +23,12 @@ namespace HomeSecurity.Bll.Services
             UserManager = userManager;
         }
 
-        public async Task<UserProfileModel> GetProfile()
-            => (await UserManager.FindByIdAsync("1"))?.MapTo<User, UserProfileModel>();
+        public async Task<UserProfileModel> GetProfile(int userId)
+            => (await UserManager.FindByIdAsync(userId.ToString()))?.MapTo<User, UserProfileModel>();
 
-        public async Task UpdateProfile(UserProfileUpdateModel model)
+        public async Task UpdateProfile(UserProfileUpdateModel model, int userId)
         {
-            var user = await UserManager.FindByIdAsync("1");
+            var user = await UserManager.FindByIdAsync(userId.ToString());
 
             user.Email = model.Email;
             user.Surname = model.Surname;

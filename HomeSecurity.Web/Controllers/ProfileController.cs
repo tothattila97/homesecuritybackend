@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HomeSecurity.Bll.Database.Entities;
+using HomeSecurity.Bll.Models;
+using HomeSecurity.Bll.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeSecurity.Web.Controllers
@@ -11,38 +16,28 @@ namespace HomeSecurity.Web.Controllers
     [Consumes("application/json")]
     [Route("api/profile")]
     [ApiController]
+    [Authorize]
     public class ProfileController : ControllerBase
     {
-        // GET: api/Profil
+        public ProfileService ProfileService { get; set; }
+        public UserManager<User> UserManager { get; }
+
+        public ProfileController(
+            ProfileService profileService,
+            UserManager<User> userManager)
+        {
+            ProfileService = profileService;
+            UserManager = userManager;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        public async Task GetProfil()
+            => await ProfileService.GetProfile(await GetCurrentUserIdAsync());
 
-        // GET: api/Profil/5
-        [HttpGet("{id}", Name = "GetProfile")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        [HttpPut]
+        public async Task UpdateProfile(UserProfileUpdateModel model)
+            => await ProfileService.UpdateProfile(model, await GetCurrentUserIdAsync());
 
-        // POST: api/Profil
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT: api/Profil/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        private async Task<int> GetCurrentUserIdAsync() => (await UserManager.GetUserAsync(HttpContext.User)).Id;
     }
 }
