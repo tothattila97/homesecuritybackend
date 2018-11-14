@@ -88,6 +88,9 @@ namespace HomeSecurity.Web
             });
 
             // using Microsoft.AspNetCore.Identity.UI.Services;
+            services.AddScoped<AccountService>();
+            services.AddScoped<UploadService>();
+            services.AddScoped<ProfileService>();
             services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddSwaggerGen(c =>

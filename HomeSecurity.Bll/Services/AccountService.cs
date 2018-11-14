@@ -26,7 +26,7 @@ namespace HomeSecurity.Bll.Services
             SignInManager = signInManager;
         }
 
-        public async Task SignUp(UserSignUpModel model)
+        public async Task<string> SignUp(UserSignUpModel model)
         {
             var registrationDate = DateTimeOffset.Now;
             var user = new User
@@ -45,10 +45,15 @@ namespace HomeSecurity.Bll.Services
 
             var result = await UserManager.CreateAsync(user);
             if (result.Succeeded)
+            {
                 await SignInManager.SignInAsync(user, false);
+                return "";
+            }
+            else
+                return "Sikertelen regisztáció!";
         }
 
-        public async Task Login(UserLoginModel model)
+        public async Task<string> Login(UserLoginModel model)
         {
             var user = await UserManager.FindByNameAsync(model.UserName);
             var result = await SignInManager.PasswordSignInAsync(user, model.Password, model.IsPersistent, true);
@@ -57,30 +62,37 @@ namespace HomeSecurity.Bll.Services
             {
                 user.DateOfLastLogin = DateTimeOffset.Now;
                 await UserManager.UpdateAsync(user);
-
+                return "";
             }
+            else
+                return "Sikertelen bejelentkezés!";
         }
 
         public async Task Logout()
             => await SignInManager.SignOutAsync();
 
-        public async Task ChangePassword(ChangePasswordModel model, int userId)
+        public async Task<string> ChangePassword(ChangePasswordModel model, int userId)
         {
             // A modelből ha csak az egyik elem jön le akkor is megtaláljuk a felhasználót
             var user = await UserManager.FindByEmailAsync(userId.ToString());
 
             var result = await UserManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             if (!result.Succeeded)
-                throw new Exception("A jelszó helyreállítás nem sikerült");
+                return "Sikertelen jelszó változtatás!";
+            else
+                return "";
         }
 
-        public async Task DeleteUser(int userId)
+        public async Task<string> DeleteUser(int userId)
         {
             //HttpContext bekötése hogy tudjuk melyik usert kell törölni
             var deletableUser = await UserManager.FindByIdAsync(userId.ToString());
             var result = await UserManager.DeleteAsync(deletableUser);
             if (!result.Succeeded)
-                throw new Exception("A felhasználói fiók törlése nem sikerült!");
+                return "Sikertelen a felhasználói fiók törlése!";
+            else
+                return "";
+                
         }
     }
 }

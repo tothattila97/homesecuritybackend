@@ -28,12 +28,12 @@ namespace HomeSecurity.Web.Controllers
         }
 
         [HttpPost("signup")]
-        public async Task SignUp(UserSignUpModel model)
-            => await AccountService.SignUp(model);
-
+        public async Task<IActionResult> SignUp(UserSignUpModel model)
+         => await AccountService.SignUp(model) == "" ? Ok() : (IActionResult)BadRequest();
+ 
         [HttpPost("login")]
-        public async Task Login(UserLoginModel model)
-            => await AccountService.Login(model);
+        public async Task<IActionResult> Login(UserLoginModel model)
+            => await AccountService.Login(model) == "" ? Ok() : (IActionResult)BadRequest();
 
         [Authorize]
         [HttpPost("logout")]
@@ -42,13 +42,15 @@ namespace HomeSecurity.Web.Controllers
 
         [Authorize]
         [HttpPost("changepassword")]
-        public async Task ChangePassword(ChangePasswordModel model)
-            => await AccountService.ChangePassword(model, await GetCurrentUserIdAsync());
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+            => await AccountService.ChangePassword(model, await GetCurrentUserIdAsync()) == "" 
+                        ? Ok() : (IActionResult)BadRequest();
 
         [Authorize]
         [HttpDelete("deleteaccount")]
-        public async Task DeleteUser()
-            => await AccountService.DeleteUser(await GetCurrentUserIdAsync());
+        public async Task<IActionResult> DeleteUser()
+            => await AccountService.DeleteUser(await GetCurrentUserIdAsync()) == "" 
+                        ? Ok() : (IActionResult)BadRequest();
 
         private async Task<int> GetCurrentUserIdAsync() => (await UserManager.GetUserAsync(HttpContext.User)).Id;
     }

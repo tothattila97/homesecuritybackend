@@ -26,7 +26,7 @@ namespace HomeSecurity.Bll.Services
         public async Task<UserProfileModel> GetProfile(int userId)
             => (await UserManager.FindByIdAsync(userId.ToString()))?.MapTo<User, UserProfileModel>();
 
-        public async Task UpdateProfile(UserProfileUpdateModel model, int userId)
+        public async Task<string> UpdateProfile(UserProfileUpdateModel model, int userId)
         {
             var user = await UserManager.FindByIdAsync(userId.ToString());
 
@@ -36,7 +36,11 @@ namespace HomeSecurity.Bll.Services
             user.PhoneNumber = model.PhoneNumber;
             user.UserName = model.UserName;
 
-            await UserManager.UpdateAsync(user);
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+                return "";
+            else
+                return "A felhasználói profil módosítása sikertelen volt!";
         }
 
     }

@@ -35,8 +35,9 @@ namespace HomeSecurity.Web.Controllers
             => await ProfileService.GetProfile(await GetCurrentUserIdAsync());
 
         [HttpPut]
-        public async Task UpdateProfile(UserProfileUpdateModel model)
-            => await ProfileService.UpdateProfile(model, await GetCurrentUserIdAsync());
+        public async Task<IActionResult> UpdateProfile(UserProfileUpdateModel model)
+            => await ProfileService.UpdateProfile(model, await GetCurrentUserIdAsync()) == "" 
+                        ? Ok() : (IActionResult)BadRequest();
 
         private async Task<int> GetCurrentUserIdAsync() => (await UserManager.GetUserAsync(HttpContext.User)).Id;
     }
