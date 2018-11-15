@@ -21,7 +21,7 @@ namespace HomeSecurity.Bll.Services
         public UserManager<User> UserManager { get; }
         public IEmailService EmailService { get; }
 
-        public const string connectionString = "DefaultEndpointsProtocol=https;AccountName=homesecurityimages;AccountKey=yHqvH+aXFHEGSzfft0tUNjS9UDxCEPqPvOvw0ZHwPBWUOriJTrVxG1VmIrHdNxGRaWqgSmqOuFVWZIrzGt8fkA==;EndpointSuffix=core.windows.net";
+        public const string connectionString = "";
 
         public UploadService(
             HomeSecurityDbContext context,
