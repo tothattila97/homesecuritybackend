@@ -1,5 +1,6 @@
 ﻿using HomeSecurity.Bll.Database;
 using HomeSecurity.Bll.Database.Entities;
+using HomeSecurity.Bll.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.WindowsAzure.Storage;
@@ -18,15 +19,18 @@ namespace HomeSecurity.Bll.Services
     {
         public HomeSecurityDbContext Context { get; }
         public UserManager<User> UserManager { get; }
+        public IEmailService EmailService { get; }
 
         public const string connectionString = "DefaultEndpointsProtocol=https;AccountName=homesecurityimages;AccountKey=yHqvH+aXFHEGSzfft0tUNjS9UDxCEPqPvOvw0ZHwPBWUOriJTrVxG1VmIrHdNxGRaWqgSmqOuFVWZIrzGt8fkA==;EndpointSuffix=core.windows.net";
 
         public UploadService(
             HomeSecurityDbContext context,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IEmailService emailService)
         {
             Context = context;
             UserManager = userManager;
+            EmailService = emailService;
         }
 
         public async Task<bool> UploadImageToPersonalBlobStorage(Stream fileStream, string fileName, string azureConnection, int userId)
@@ -40,6 +44,13 @@ namespace HomeSecurity.Bll.Services
 
             CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(fileName);
             await blockBlob.UploadFromStreamAsync(fileStream);
+
+            EmailService.Send(new EmailMessageModel
+            {
+                Email = user.Email,
+                Subject = "Upload notification",
+                Content = "An image was uploaded to your storage. You be able to look them on our website!"
+            });
 
             return await Task.FromResult(true);
         }

@@ -34,7 +34,7 @@ namespace HomeSecurity.Web.Controllers
             Configuration = configuration;
             UserManager = userManager;
             UploadService = uploadService;
-            AzureConnectionString = Configuration.GetSection("AzureStorageConfig").GetValue<string>("StorageConnectionString");
+            //AzureConnectionString = Configuration.GetSection("AzureStorageConfig").GetValue<string>("StorageConnectionString");
             AccountName = Configuration.GetSection("AzureStorageConfig").GetValue<string>("AccountName");
             AccountKey = Configuration.GetSection("AzureStorageConfig").GetValue<string>("AccountKey");
         }

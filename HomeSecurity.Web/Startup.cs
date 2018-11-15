@@ -91,7 +91,8 @@ namespace HomeSecurity.Web
             services.AddScoped<AccountService>();
             services.AddScoped<UploadService>();
             services.AddScoped<ProfileService>();
-            services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 
             services.AddSwaggerGen(c =>
             {
