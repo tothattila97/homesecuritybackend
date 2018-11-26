@@ -15,7 +15,7 @@ namespace HomeSecurity.Web.Controllers
 {
     [Route("api/upload")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UploadController : Controller
     {
         public IConfiguration Configuration { get; }

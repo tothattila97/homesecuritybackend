@@ -37,6 +37,7 @@ namespace HomeSecurity.Web
             services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<HomeSecurityDbContext>()
                 .AddDefaultTokenProviders();
+
             services.AddDbContext<HomeSecurityDbContext>(options => 
                 options.UseSqlServer(
                     Configuration.GetConnectionString("HomeSecurityConnection")));

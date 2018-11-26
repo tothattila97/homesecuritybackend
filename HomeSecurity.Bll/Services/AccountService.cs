@@ -27,13 +27,10 @@ namespace HomeSecurity.Bll.Services
             SignInManager = signInManager;
         }
 
-        public async Task<string> SignUp(UserSignUpModel model)
+        public async Task<bool> SignUp(UserSignUpModel model)
         {
             var registrationDate = DateTimeOffset.Now;
-            var containerName = new string((from c in model.UserName
-                              where char.IsLetterOrDigit(c)
-                              select c
-                            ).ToArray());
+            var containerName = new string(model.UserName.Where(char.IsLetterOrDigit).ToArray());
             var user = new User
             {
                 UserName = model.UserName,
@@ -48,25 +45,25 @@ namespace HomeSecurity.Bll.Services
                 ContainerId = containerName + Guid.NewGuid().ToString()
             };
 
-            var result = await UserManager.CreateAsync(user);
+            var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 await SignInManager.SignInAsync(user, false);
-                return "";
+                return true;
             }
             else
-                return "Sikertelen regisztáció!";
+                return false;
         }
 
         public async Task<string> Login(UserLoginModel model)
         {
-            var user = await UserManager.FindByNameAsync(model.UserName);
-            var result = await SignInManager.PasswordSignInAsync(user, model.Password, model.IsPersistent, true);
+            //var user = await UserManager.FindByNameAsync(model.UserName);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.IsPersistent, true);
 
             if (result.Succeeded)
             {
-                user.DateOfLastLogin = DateTimeOffset.Now;
-                await UserManager.UpdateAsync(user);
+                //user.DateOfLastLogin = DateTimeOffset.Now;
+                //await UserManager.UpdateAsync(user);
                 return "";
             }
             else

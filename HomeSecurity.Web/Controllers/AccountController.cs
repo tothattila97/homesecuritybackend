@@ -32,7 +32,7 @@ namespace HomeSecurity.Web.Controllers
 
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp(UserSignUpModel model)
-         => await AccountService.SignUp(model) == "" ? Ok() : (IActionResult)BadRequest();
+         => await AccountService.SignUp(model) ? Ok() : (IActionResult)BadRequest();
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginModel model)
@@ -51,7 +51,7 @@ namespace HomeSecurity.Web.Controllers
 
             return await AccountService.Login(model) == "" ? Ok() : (IActionResult)BadRequest();
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost("logout")]
         public async Task Logout()
         {
