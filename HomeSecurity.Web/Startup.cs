@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HomeSecurity.Bll.Database;
 using HomeSecurity.Bll.Database.Entities;
 using HomeSecurity.Bll.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -36,7 +37,9 @@ namespace HomeSecurity.Web
             services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<HomeSecurityDbContext>()
                 .AddDefaultTokenProviders();
-            services.AddDbContext<HomeSecurityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HomeSecurityConnection")));
+            services.AddDbContext<HomeSecurityDbContext>(options => 
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("HomeSecurityConnection")));
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -64,6 +67,12 @@ namespace HomeSecurity.Web
             //services.AddSingleton<IConfiguration>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLogging();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    //options.Cookie
+                });
+
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -71,7 +80,7 @@ namespace HomeSecurity.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+          
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddRazorPagesOptions(options =>
                 {

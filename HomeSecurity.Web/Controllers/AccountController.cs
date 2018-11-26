@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using HomeSecurity.Bll.Database.Entities;
 using HomeSecurity.Bll.Models;
 using HomeSecurity.Bll.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -30,16 +33,32 @@ namespace HomeSecurity.Web.Controllers
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp(UserSignUpModel model)
          => await AccountService.SignUp(model) == "" ? Ok() : (IActionResult)BadRequest();
- 
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginModel model)
-            => await AccountService.Login(model) == "" ? Ok() : (IActionResult)BadRequest();
+        {
+            var claimsIdentity = new ClaimsIdentity(new List<Claim> {
+                new Claim(ClaimTypes.Actor, (await UserManager.FindByNameAsync(model.UserName)).Id.ToString()) },
+                CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
 
+            };
+            await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity),
+            authProperties);
+
+            return await AccountService.Login(model) == "" ? Ok() : (IActionResult)BadRequest();
+        }
         [Authorize]
         [HttpPost("logout")]
         public async Task Logout()
-            => await AccountService.Logout();
-
+        {
+            await AccountService.Logout();
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+        }
         [Authorize]
         [HttpPost("changepassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordModel model)

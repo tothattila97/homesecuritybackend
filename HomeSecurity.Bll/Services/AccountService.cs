@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,10 @@ namespace HomeSecurity.Bll.Services
         public async Task<string> SignUp(UserSignUpModel model)
         {
             var registrationDate = DateTimeOffset.Now;
+            var containerName = new string((from c in model.UserName
+                              where char.IsLetterOrDigit(c)
+                              select c
+                            ).ToArray());
             var user = new User
             {
                 UserName = model.UserName,
@@ -40,7 +45,7 @@ namespace HomeSecurity.Bll.Services
                 DateOfRegistration = registrationDate,
                 Gender = model.Gender,
                 Email = model.Email,
-                ContainerId = model.UserName + Guid.NewGuid().ToString()
+                ContainerId = containerName + Guid.NewGuid().ToString()
             };
 
             var result = await UserManager.CreateAsync(user);

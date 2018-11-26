@@ -37,7 +37,7 @@ namespace HomeSecurity.Bll.Services
         {
             var user = await UserManager.FindByIdAsync(userId.ToString());
 
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(connectionString.ToString());
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(azureConnection.ToString());
             CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
             CloudBlobContainer blobContainer = blobClient.GetContainerReference(user.ContainerId);
             await blobContainer.CreateIfNotExistsAsync();

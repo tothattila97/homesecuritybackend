@@ -15,13 +15,13 @@ namespace HomeSecurity.Web.Controllers
 {
     [Route("api/upload")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UploadController : Controller
     {
         public IConfiguration Configuration { get; }
         public UserManager<User> UserManager { get; }
         public UploadService UploadService { get; }
-        public string AzureConnectionString { get; }
+        public string AzureConnectionString { get; } = "DefaultEndpointsProtocol=https;AccountName=homesecurityimages;AccountKey=yHqvH+aXFHEGSzfft0tUNjS9UDxCEPqPvOvw0ZHwPBWUOriJTrVxG1VmIrHdNxGRaWqgSmqOuFVWZIrzGt8fkA==;EndpointSuffix=core.windows.net";
         public string AccountName { get; }
         public string AccountKey { get; }
         public string ThumbnailContainer { get; }
@@ -39,7 +39,7 @@ namespace HomeSecurity.Web.Controllers
             AccountKey = Configuration.GetSection("AzureStorageConfig").GetValue<string>("AccountKey");
         }
 
-        //[Consumes("multipart/form-data")]
+        [Consumes("multipart/form-data")]
         [HttpPost]
         public async Task<IActionResult> UploadImage(IFormFile file)
         {
@@ -78,6 +78,11 @@ namespace HomeSecurity.Web.Controllers
             }
            
         }
-        private async Task<int> GetCurrentUserIdAsync() => (await UserManager.GetUserAsync(HttpContext.User)).Id;
+        private async Task<int> GetCurrentUserIdAsync()
+        {
+            var user =  await UserManager.GetUserAsync(HttpContext.User);
+            var id = user?.Id;
+            return id.GetValueOrDefault();
+        }
     }
 }
