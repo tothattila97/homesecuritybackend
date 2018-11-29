@@ -15,13 +15,13 @@ namespace HomeSecurity.Web.Controllers
 {
     [Route("api/upload")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UploadController : Controller
     {
         public IConfiguration Configuration { get; }
         public UserManager<User> UserManager { get; }
         public UploadService UploadService { get; }
-        public string AzureConnectionString { get; } = "";
+        public string AzureConnectionString { get; } = "DefaultEndpointsProtocol=https;AccountName=homesecurityimages;AccountKey=yHqvH+aXFHEGSzfft0tUNjS9UDxCEPqPvOvw0ZHwPBWUOriJTrVxG1VmIrHdNxGRaWqgSmqOuFVWZIrzGt8fkA==;EndpointSuffix=core.windows.net";
         public string AccountName { get; }
         public string AccountKey { get; }
         public string ThumbnailContainer { get; }
@@ -49,13 +49,13 @@ namespace HomeSecurity.Web.Controllers
                 if (file == null)
                     return BadRequest("Nincs fogadott feltöltendő fájl");
                 if (AccountKey == string.Empty || AccountName == string.Empty)
-                    return BadRequest("Nem tudjuk feloldani az Azure tárhelyed, csekkold hogy van megadva accountName és acoountKey!");
+                    return BadRequest("Nem tudjuk feloldani az Azure tárhelyed, csekkold hogy van megadva accountName és accountKey!");
 
                 if (UploadService.IsImage(file) && file.Length > 0)
                 {
                     using (Stream stream = file.OpenReadStream())
                     {
-                        isUploaded = await UploadService.UploadImageToPersonalBlobStorage(stream, file.FileName, AzureConnectionString, await GetCurrentUserIdAsync());
+                        isUploaded = await UploadService.UploadImageToPersonalBlobStorage(stream, file.FileName, AzureConnectionString, 4 /*await GetCurrentUserIdAsync()*/);
                     }
                 }
                 else
@@ -78,6 +78,7 @@ namespace HomeSecurity.Web.Controllers
             }
            
         }
+
         private async Task<int> GetCurrentUserIdAsync()
         {
             var user =  await UserManager.GetUserAsync(HttpContext.User);

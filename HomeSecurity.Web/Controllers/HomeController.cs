@@ -19,7 +19,6 @@ namespace HomeSecurity.Web.Controllers
         }
         public IActionResult Index()
         {
-            var kutya = Configuration["test"];
             return View();
         }
 

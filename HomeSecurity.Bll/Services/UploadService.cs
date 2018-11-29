@@ -21,8 +21,6 @@ namespace HomeSecurity.Bll.Services
         public UserManager<User> UserManager { get; }
         public IEmailService EmailService { get; }
 
-        public const string connectionString = "";
-
         public UploadService(
             HomeSecurityDbContext context,
             UserManager<User> userManager,
@@ -101,7 +99,7 @@ namespace HomeSecurity.Bll.Services
 
                     //Return the URI string for the container, including the SAS token.
                     thumbnailUrls.Add(blob.Uri + sasBlobToken);
-
+                    
                 }
 
                 //Get the continuation token.
