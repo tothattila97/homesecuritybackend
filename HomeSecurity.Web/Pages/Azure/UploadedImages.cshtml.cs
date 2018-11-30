@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeSecurity.Bll.Database.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,6 +14,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace HomeSecurity.Web.Pages.Azure
 {
+    [Authorize]
     public class UploadedImagesModel : PageModel
     {
         public IConfiguration Configuration { get; }

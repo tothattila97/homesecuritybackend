@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace HomeSecurity.Web.Areas.Identity.Pages.Account
 {
@@ -67,6 +68,7 @@ namespace HomeSecurity.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                var containerName = new string(Input.Email.Where(char.IsLetterOrDigit).ToArray());
                 var user = new User { UserName = Input.Email, Email = Input.Email,
                     Surname = "",
                     LastName = "",
@@ -74,8 +76,8 @@ namespace HomeSecurity.Web.Areas.Identity.Pages.Account
                     PhoneNumber = "",
                     DateOfLastLogin = DateTimeOffset.Now,
                     DateOfRegistration = DateTimeOffset.Now,
-                    Gender = Bll.Enums.Gender.Man,
-                    ContainerId = Input.Email + Guid.NewGuid().ToString()
+                    Gender = Bll.Enums.Gender.NotBinary,
+                    ContainerId = containerName + Guid.NewGuid().ToString()
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

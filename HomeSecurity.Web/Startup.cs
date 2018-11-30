@@ -38,7 +38,7 @@ namespace HomeSecurity.Web
                 .AddEntityFrameworkStores<HomeSecurityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddDbContext<HomeSecurityDbContext>(options => 
+            services.AddDbContext<HomeSecurityDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("HomeSecurityConnection")));
 
@@ -71,7 +71,7 @@ namespace HomeSecurity.Web
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    //options.Cookie
+                    //options.Cookie 
                 });
 
 
@@ -81,7 +81,7 @@ namespace HomeSecurity.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-          
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddRazorPagesOptions(options =>
                 {
@@ -131,6 +131,19 @@ namespace HomeSecurity.Web
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
+            }
+            try
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
+                {
+                    serviceScope.ServiceProvider.GetService<HomeSecurityDbContext>().Database.Migrate();
+                }
+            }
+            catch (Exception ex)
+            {
+                // I'm using Serilog here, but use the logging solution of your choice.
+                throw ex;
             }
 
             app.UseSwagger();
