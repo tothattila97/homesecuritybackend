@@ -19,9 +19,8 @@ namespace HomeSecurity.Bll.Models
         [Required(ErrorMessage = "Confirm password is required!")]
         [DataType(DataType.Password)]
         [Compare("Password")]
-        public string ConfirmPasswrod { get; set; }
+        public string ConfirmPassword { get; set; }
         [Required(ErrorMessage = "Phonenumber is required!")]
-        [Phone]
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage = "Date of birth is required!")]
         public DateTimeOffset DateOfBirth { get; set; }
