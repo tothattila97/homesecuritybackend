@@ -4,5 +4,90 @@
     ViewData["Title"] = "Profile";
 }
 
-<h2>Profile</h2>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+
+<div class="container">
+    <div class="card mt-5">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Your Profile</h4>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                @{
+                    var profileData = @Model.Profile;
+                 }
+                
+                <div class="col-md-12">
+                    <form class="disabled">
+                        <div class="form-group row">
+                            <label for="username" class="col-4 col-form-label">User Name*</label>
+                            <div class="col-8">
+                                <input id="username" disabled name="username" placeholder="Username" class="form-control here" required="required" type="text" value="@(profileData.UserName)">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="name" class="col-4 col-form-label">First Name</label>
+                            <div class="col-8">
+                                <input id="firstname" disabled name="firstname" placeholder="First Name" class="form-control here" type="text" value="@(profileData.FirstName)">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="lastname" class="col-4 col-form-label">Last Name</label>
+                            <div class="col-8">
+                                <input id="lastname" disabled name="lastname" placeholder="Last Name" class="form-control here" type="text" value="@(profileData.LastName)">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="text" class="col-4 col-form-label">Nick Name*</label>
+                            <div class="col-8">
+                                <input id="phoneNumber" name="phoneNumber" disabled placeholder="Nick Name" class="form-control here" required="required" type="text" value="@(profileData.PhoneNumber)">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="email" class="col-4 col-form-label">Email*</label>
+                            <div class="col-8">
+                                <input id="email" name="email" disabled placeholder="Email" class="form-control here" required="required" type="text" value="@(profileData.Email)">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="website" class="col-4 col-form-label">Website</label>
+                            <div class="col-8">
+                                <input id="dateofbirth" disabled name="dateofbirth" placeholder="website" class="form-control here" type="text" value="@(profileData.DateOfBirth)">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="publicinfo" class="col-4 col-form-label">Public Info</label>
+                            <div class="col-8">
+                                <textarea id="publicinfo" disabled name="publicinfo" cols="40" rows="4" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="newpass" class="col-4 col-form-label">New Password</label>
+                            <div class="col-8">
+                                <input id="gender" disabled name="gender" placeholder="New Password" class="form-control here" type="text" value="@(profileData.Gender)">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="offset-4 col-8">
+                                <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <hr />
+    <footer>
+        <p>&copy; 2018 - HomeSecurity</p>
+    </footer>
+</div>

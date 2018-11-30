@@ -10,7 +10,7 @@ namespace HomeSecurity.Bll.Database.Entities
     public class User: IdentityUser<int>
     {
         [Required]
-        public string Surname { get; set; }
+        public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
         [Required]

@@ -31,7 +31,7 @@ namespace HomeSecurity.Bll.Services
             var user = await UserManager.FindByIdAsync(userId.ToString());
 
             user.Email = model.Email;
-            user.Surname = model.Surname;
+            user.FirstName = model.Surname;
             user.LastName = model.LastName;
             user.PhoneNumber = model.PhoneNumber;
             user.UserName = model.UserName;

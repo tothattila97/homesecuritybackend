@@ -70,7 +70,7 @@ namespace HomeSecurity.Web.Areas.Identity.Pages.Account
             {
                 var containerName = new string(Input.Email.Where(char.IsLetterOrDigit).ToArray());
                 var user = new User { UserName = Input.Email, Email = Input.Email,
-                    Surname = "",
+                    FirstName = "",
                     LastName = "",
                     DateOfBirth = DateTimeOffset.Now,
                     PhoneNumber = "",
