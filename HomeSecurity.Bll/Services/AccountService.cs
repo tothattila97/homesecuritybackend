@@ -34,7 +34,7 @@ namespace HomeSecurity.Bll.Services
             var user = new User
             {
                 UserName = model.UserName,
-                Surname = model.Surname,
+                Surname = model.FirstName,
                 LastName = model.LastName,
                 DateOfBirth = model.DateOfBirth,
                 PhoneNumber = model.PhoneNumber,

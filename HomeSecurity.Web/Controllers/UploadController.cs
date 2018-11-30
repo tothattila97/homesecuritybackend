@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeSecurity.Bll.Database.Entities;
+using HomeSecurity.Bll.Models;
 using HomeSecurity.Bll.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +16,7 @@ namespace HomeSecurity.Web.Controllers
 {
     [Route("api/upload")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UploadController : Controller
     {
         public IConfiguration Configuration { get; }
@@ -39,23 +40,23 @@ namespace HomeSecurity.Web.Controllers
             AccountKey = Configuration.GetSection("AzureStorageConfig").GetValue<string>("AccountKey");
         }
 
-        [Consumes("multipart/form-data")]
+        //[Consumes("multipart/form-data")]
         [HttpPost]
-        public async Task<IActionResult> UploadImage(IFormFile file)
+        public async Task<IActionResult> UploadImage(UploadModel model)
         {
             bool isUploaded = false;
             try
             {
-                if (file == null)
+                if (model.ImageFile == null)
                     return BadRequest("Nincs fogadott feltöltendő fájl");
                 if (AccountKey == string.Empty || AccountName == string.Empty)
                     return BadRequest("Nem tudjuk feloldani az Azure tárhelyed, csekkold hogy van megadva accountName és accountKey!");
 
-                if (UploadService.IsImage(file) && file.Length > 0)
+                if (UploadService.IsImage(model.ImageFile) && model.ImageFile.Length > 0)
                 {
-                    using (Stream stream = file.OpenReadStream())
+                    using (Stream stream = model.ImageFile.OpenReadStream())
                     {
-                        isUploaded = await UploadService.UploadImageToPersonalBlobStorage(stream, file.FileName, AzureConnectionString, 4 /*await GetCurrentUserIdAsync()*/);
+                        isUploaded = await UploadService.UploadImageToPersonalBlobStorage(stream, model.ImageFile.FileName, AzureConnectionString, await GetCurrentUserIdAsync());
                     }
                 }
                 else
@@ -80,10 +81,6 @@ namespace HomeSecurity.Web.Controllers
         }
 
         private async Task<int> GetCurrentUserIdAsync()
-        {
-            var user =  await UserManager.GetUserAsync(HttpContext.User);
-            var id = user?.Id;
-            return id.GetValueOrDefault();
-        }
+            => (await UserManager.GetUserAsync(HttpContext.User)).Id;
     }
 }

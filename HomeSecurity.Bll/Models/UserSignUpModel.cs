@@ -27,7 +27,8 @@ namespace HomeSecurity.Bll.Models
         public DateTimeOffset DateOfBirth { get; set; }
         public Gender Gender { get; set; }
         [Required]
-        public string Surname { get; set; }
+        public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
     }
 }
