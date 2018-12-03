@@ -130,7 +130,7 @@ namespace HomeSecurity.Web
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                //app.UseHsts();
             }
             try
             {
@@ -153,7 +153,7 @@ namespace HomeSecurity.Web
                 c.DocExpansion(DocExpansion.None);
             });
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 

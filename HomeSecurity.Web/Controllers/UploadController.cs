@@ -22,7 +22,7 @@ namespace HomeSecurity.Web.Controllers
         public IConfiguration Configuration { get; }
         public UserManager<User> UserManager { get; }
         public UploadService UploadService { get; }
-        public string AzureConnectionString { get; } = "";
+        public string AzureConnectionString { get; } = "DefaultEndpointsProtocol=https;AccountName=homesecurityimages;AccountKey=yHqvH+aXFHEGSzfft0tUNjS9UDxCEPqPvOvw0ZHwPBWUOriJTrVxG1VmIrHdNxGRaWqgSmqOuFVWZIrzGt8fkA==;EndpointSuffix=core.windows.net";
         public string AccountName { get; }
         public string AccountKey { get; }
         public string ThumbnailContainer { get; }
@@ -40,23 +40,24 @@ namespace HomeSecurity.Web.Controllers
             AccountKey = Configuration.GetSection("AzureStorageConfig").GetValue<string>("AccountKey");
         }
 
-        //[Consumes("multipart/form-data")]
+        [Consumes("multipart/form-data")]
         [HttpPost]
-        public async Task<IActionResult> UploadImage(UploadModel model)
+        public async Task<IActionResult> UploadImage(IFormFile imageFile, bool isNotifiableByEmail)
+
         {
             bool isUploaded = false;
             try
             {
-                if (model.ImageFile == null)
+                if (imageFile == null)
                     return BadRequest("Nincs fogadott feltöltendő fájl");
                 if (AccountKey == string.Empty || AccountName == string.Empty)
                     return BadRequest("Nem tudjuk feloldani az Azure tárhelyed, csekkold hogy van megadva accountName és accountKey!");
 
-                if (UploadService.IsImage(model.ImageFile) && model.ImageFile.Length > 0)
+                if (UploadService.IsImage(imageFile) && imageFile.Length > 0)
                 {
-                    using (Stream stream = model.ImageFile.OpenReadStream())
+                    using (Stream stream = imageFile.OpenReadStream())
                     {
-                        isUploaded = await UploadService.UploadImageToPersonalBlobStorage(stream, model.ImageFile.FileName, AzureConnectionString, await GetCurrentUserIdAsync());
+                        isUploaded = await UploadService.UploadImageToPersonalBlobStorage(stream, imageFile.FileName, AzureConnectionString, await GetCurrentUserIdAsync());
                     }
                 }
                 else

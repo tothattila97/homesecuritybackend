@@ -55,7 +55,7 @@ namespace HomeSecurity.Bll.Services
                 return false;
         }
 
-        public async Task<string> Login(UserLoginModel model)
+        public async Task<bool> Login(UserLoginModel model)
         {
             //var user = await UserManager.FindByNameAsync(model.UserName);
             var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.IsPersistent, true);
@@ -64,36 +64,36 @@ namespace HomeSecurity.Bll.Services
             {
                 //user.DateOfLastLogin = DateTimeOffset.Now;
                 //await UserManager.UpdateAsync(user);
-                return "";
+                return true;
             }
             else
-                return "Sikertelen bejelentkezés!";
+                return false;
         }
 
         public async Task Logout()
             => await SignInManager.SignOutAsync();
 
-        public async Task<string> ChangePassword(ChangePasswordModel model, int userId)
+        public async Task<bool> ChangePassword(ChangePasswordModel model, int userId)
         {
             // A modelből ha csak az egyik elem jön le akkor is megtaláljuk a felhasználót
             var user = await UserManager.FindByEmailAsync(userId.ToString());
 
             var result = await UserManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             if (!result.Succeeded)
-                return "Sikertelen jelszó változtatás!";
+                return false;
             else
-                return "";
+                return true;
         }
 
-        public async Task<string> DeleteUser(int userId)
+        public async Task<bool> DeleteUser(int userId)
         {
             //HttpContext bekötése hogy tudjuk melyik usert kell törölni
             var deletableUser = await UserManager.FindByIdAsync(userId.ToString());
             var result = await UserManager.DeleteAsync(deletableUser);
             if (!result.Succeeded)
-                return "Sikertelen a felhasználói fiók törlése!";
+                return false;
             else
-                return "";
+                return true;
                 
         }
     }

@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeSecurity.Web.Controllers
 {
-    [Produces("application/json")]
-    [Consumes("application/json")]
+    //[Produces("application/json")]
+    //[Consumes("application/json")]
     [Route("api/profile")]
     [ApiController]
     [Authorize]
@@ -31,7 +31,7 @@ namespace HomeSecurity.Web.Controllers
         }
 
         [HttpGet]
-        public async Task GetProfil()
+        public async Task<UserProfileModel> GetProfil()
             => await ProfileService.GetProfile(await GetCurrentUserIdAsync());
 
         [HttpPut]

@@ -36,39 +36,23 @@ namespace HomeSecurity.Web.Controllers
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginModel model)
-        {
-            var claimsIdentity = new ClaimsIdentity(new List<Claim> {
-                new Claim(ClaimTypes.Actor, (await UserManager.FindByNameAsync(model.UserName)).Id.ToString()) },
-                CookieAuthenticationDefaults.AuthenticationScheme);
-            var authProperties = new AuthenticationProperties
-            {
-
-            };
-            await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(claimsIdentity),
-            authProperties);
-
-            return await AccountService.Login(model) == "" ? Ok() : (IActionResult)BadRequest();
-        }
+            => await AccountService.Login(model) ? Ok() : (IActionResult)BadRequest();
+      
         //[Authorize]
         [HttpPost("logout")]
         public async Task Logout()
-        {
-            await AccountService.Logout();
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
-        }
+            => await AccountService.Logout();
+            
         [Authorize]
         [HttpPost("changepassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
-            => await AccountService.ChangePassword(model, await GetCurrentUserIdAsync()) == "" 
+            => await AccountService.ChangePassword(model, await GetCurrentUserIdAsync())
                         ? Ok() : (IActionResult)BadRequest();
 
         [Authorize]
         [HttpDelete("deleteaccount")]
         public async Task<IActionResult> DeleteUser()
-            => await AccountService.DeleteUser(await GetCurrentUserIdAsync()) == "" 
+            => await AccountService.DeleteUser(await GetCurrentUserIdAsync())
                         ? Ok() : (IActionResult)BadRequest();
 
         private async Task<int> GetCurrentUserIdAsync() => (await UserManager.GetUserAsync(HttpContext.User)).Id;
