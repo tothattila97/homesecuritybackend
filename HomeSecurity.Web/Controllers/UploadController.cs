@@ -23,7 +23,7 @@ namespace HomeSecurity.Web.Controllers
         public IConfiguration Configuration { get; }
         public UserManager<User> UserManager { get; }
         public UploadService UploadService { get; }
-        public string AzureConnectionString { get; } = "DefaultEndpointsProtocol=https;AccountName=homesecurityimages;AccountKey=yHqvH+aXFHEGSzfft0tUNjS9UDxCEPqPvOvw0ZHwPBWUOriJTrVxG1VmIrHdNxGRaWqgSmqOuFVWZIrzGt8fkA==;EndpointSuffix=core.windows.net";
+        public string AzureConnectionString { get; } = "";
         public string AccountName { get; }
         public string AccountKey { get; }
         public string ThumbnailContainer { get; }
