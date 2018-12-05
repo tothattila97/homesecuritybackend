@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,10 +23,11 @@ namespace HomeSecurity.Web.Controllers
         public IConfiguration Configuration { get; }
         public UserManager<User> UserManager { get; }
         public UploadService UploadService { get; }
-        public string AzureConnectionString { get; } = "";
+        public string AzureConnectionString { get; } = "DefaultEndpointsProtocol=https;AccountName=homesecurityimages;AccountKey=yHqvH+aXFHEGSzfft0tUNjS9UDxCEPqPvOvw0ZHwPBWUOriJTrVxG1VmIrHdNxGRaWqgSmqOuFVWZIrzGt8fkA==;EndpointSuffix=core.windows.net";
         public string AccountName { get; }
         public string AccountKey { get; }
         public string ThumbnailContainer { get; }
+        public ConcurrentDictionary<int, DateTime> UserUploadTimeDic { get; set; }
 
         public UploadController(
             IConfiguration configuration,
@@ -48,21 +50,26 @@ namespace HomeSecurity.Web.Controllers
             bool isUploaded = false;
             try
             {
-                if (imageFile == null)
-                    return BadRequest("Nincs fogadott feltöltendő fájl");
-                if (AccountKey == string.Empty || AccountName == string.Empty)
-                    return BadRequest("Nem tudjuk feloldani az Azure tárhelyed, csekkold hogy van megadva accountName és accountKey!");
-
-                if (UploadService.IsImage(imageFile) && imageFile.Length > 0)
+                if(true)
                 {
-                    using (Stream stream = imageFile.OpenReadStream())
-                    {
-                        isUploaded = await UploadService.UploadImageToPersonalBlobStorage(stream, imageFile.FileName, AzureConnectionString, await GetCurrentUserIdAsync());
-                    }
-                }
-                else
-                    return new UnsupportedMediaTypeResult();
+                    if (imageFile == null)
+                        return BadRequest("Nincs fogadott feltöltendő fájl");
+                    if (AccountKey == string.Empty || AccountName == string.Empty)
+                        return BadRequest("Nem tudjuk feloldani az Azure tárhelyed, csekkold hogy van megadva accountName és accountKey!");
 
+                    if (UploadService.IsImage(imageFile) && imageFile.Length > 0)
+                    {
+                        using (Stream stream = imageFile.OpenReadStream())
+                        {
+                            isUploaded = await UploadService.UploadImageToPersonalBlobStorage(stream, DateTime.Now.ToString("yyMMddHHmmssffffff") + imageFile.FileName, AzureConnectionString, await GetCurrentUserIdAsync(), isNotifiableByEmail);
+                        }
+                    }
+                    else
+                        return new UnsupportedMediaTypeResult();
+
+                    
+                    return new OkResult();
+                }
                 return new AcceptedResult();
                 /*if (isUploaded)
                 {

@@ -14,65 +14,60 @@
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
 </environment>
 
-<h2>UploadedImages</h2>
-
 <div class="container body-content">
+    <h2>UploadedImages</h2>
     @{
         var model = "//via.placeholder.com/350x150";
 
-    <div class="row">
-        <div class="col-lg-10">
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <td class="text-center">Image</td>
-                        <td class="text-center">Creation time</td>
-                        <td class="text-center">Modification time</td>
-                        <td class="text-center">Size</td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.ContainerImageUrls)
-                    {
+        <div class="row">
+            <div class="col-lg-10">
+                <table class="table table-hover table-bordered">
+                    <thead>
                         <tr>
-                            <td class="text-center">
-                                <img src="@(item.Uri)" />
-                            </td>
-                            <td class="text-center">@(item.CreationTime.GetValueOrDefault().DateTime)</td>
-                            <td class="text-center">@(item.ModifiedTime.GetValueOrDefault().DateTime)</td>
-                            <td class="text-center">@( (item.Length / 1024)+"."+(item.Length % 1024)) KiB</td>
-                            <td class="text-center">
-                                <button class="btn btn-danger">Delete</button>
-                            </td>
+                            <td class="text-center">Image</td>
+                            <td class="text-center">Creation time</td>
+                            <td class="text-center">Modification time</td>
+                            <td class="text-center">Size</td>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <!--<div class="col-lg-6">
-        <table class="table table-hover table-bordered">
-            <thead>
-                <tr>
-                    <td>Kép</td>
-                    <td>Másik oszlop</td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var i in Enumerable.Range(1, 10))
-                {
-                    <tr>
-                        <td class="text-center">
-                            <img src="@(model)" />
-                        </td>
-                        <td>Attila</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>-->
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ContainerImageUrls)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <img src="@(item.Uri)" />
+                                </td>
+                                <td class="text-center">@(item.CreationTime.GetValueOrDefault().DateTime)</td>
+                                <td class="text-center">@(item.ModifiedTime.GetValueOrDefault().DateTime)</td>
+                                <td class="text-center">@( (item.Length / 1024) + "." + (item.Length % 1024)) KiB</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!--<div class="col-lg-6">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Kép</td>
+                            <td>Másik oszlop</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in Enumerable.Range(1, 10))
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <img src="@(model)" />
+                                </td>
+                                <td>Attila</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>-->
 
-    </div>
+        </div>
 
 
     }

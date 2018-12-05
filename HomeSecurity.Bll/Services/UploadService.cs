@@ -31,7 +31,7 @@ namespace HomeSecurity.Bll.Services
             EmailService = emailService;
         }
 
-        public async Task<bool> UploadImageToPersonalBlobStorage(Stream fileStream, string fileName, string azureConnection, int userId)
+        public async Task<bool> UploadImageToPersonalBlobStorage(Stream fileStream, string fileName, string azureConnection, int userId, bool isNotifiableByEmail)
         {
             var user = await UserManager.FindByIdAsync(userId.ToString());
 
@@ -43,13 +43,13 @@ namespace HomeSecurity.Bll.Services
             CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(fileName);
             await blockBlob.UploadFromStreamAsync(fileStream);
 
-            EmailService.Send(new EmailMessageModel
-            {
-                Email = user.Email,
-                Subject = "Upload notification",
-                Content = "An image was uploaded to your storage. You be able to look them on our website!"
-            });
-
+            if (isNotifiableByEmail)
+                EmailService.Send(new EmailMessageModel
+                {
+                    Email = user.Email,
+                    Subject = "Upload notification",
+                    Content = "An image was uploaded to your storage. You be able to look them on our website!"
+                });
             return await Task.FromResult(true);
         }
 
@@ -89,7 +89,7 @@ namespace HomeSecurity.Bll.Services
                     //The shared access signature will be valid immediately.
                     SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
                     {
-                        SharedAccessStartTime = DateTimeOffset.UtcNow.AddMinutes(-5),  
+                        SharedAccessStartTime = DateTimeOffset.UtcNow.AddMinutes(-5),
                         SharedAccessExpiryTime = DateTimeOffset.UtcNow.AddHours(24),
                         Permissions = SharedAccessBlobPermissions.Read
                     };
@@ -99,7 +99,7 @@ namespace HomeSecurity.Bll.Services
 
                     //Return the URI string for the container, including the SAS token.
                     thumbnailUrls.Add(blob.Uri + sasBlobToken);
-                    
+
                 }
 
                 //Get the continuation token.

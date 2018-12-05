@@ -65,7 +65,7 @@ namespace HomeSecurity.Web.Pages.Azure
             {
                 //This overload allows control of the page size. You can return all remaining results by passing null for the maxResults parameter,
                 //or by calling a different overload.
-                resultSegment = container.ListBlobsSegmentedAsync("", true, BlobListingDetails.All, 10, continuationToken, null, null).GetAwaiter().GetResult();
+                resultSegment = container.ListBlobsSegmentedAsync("", true, BlobListingDetails.All, 15, continuationToken, null, null).GetAwaiter().GetResult();
 
                 foreach (var blobItem in resultSegment.Results)
                 {
@@ -99,8 +99,6 @@ namespace HomeSecurity.Web.Pages.Azure
             }
 
             while (continuationToken != null);
-
-            //return await Task.FromResult(ContainerImageUrls);
         }
     }
 }
