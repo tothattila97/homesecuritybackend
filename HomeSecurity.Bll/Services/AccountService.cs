@@ -30,7 +30,7 @@ namespace HomeSecurity.Bll.Services
         public async Task<bool> SignUp(UserSignUpModel model)
         {
             var registrationDate = DateTimeOffset.Now;
-            var containerName = new string(model.UserName.Where(char.IsLetterOrDigit).ToArray());
+            var containerName = new string(model.UserName.Where(char.IsLetterOrDigit).ToArray()).ToLower();
             var user = new User
             {
                 UserName = model.UserName,
@@ -57,13 +57,13 @@ namespace HomeSecurity.Bll.Services
 
         public async Task<bool> Login(UserLoginModel model)
         {
-            //var user = await UserManager.FindByNameAsync(model.UserName);
-            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.IsPersistent, true);
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.IsPersistent, true);
 
             if (result.Succeeded)
             {
-                //user.DateOfLastLogin = DateTimeOffset.Now;
-                //await UserManager.UpdateAsync(user);
+                user.DateOfLastLogin = DateTimeOffset.Now;
+                await UserManager.UpdateAsync(user);
                 return true;
             }
             else

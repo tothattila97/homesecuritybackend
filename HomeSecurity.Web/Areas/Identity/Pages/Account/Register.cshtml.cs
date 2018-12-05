@@ -68,7 +68,7 @@ namespace HomeSecurity.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var containerName = new string(Input.Email.Where(char.IsLetterOrDigit).ToArray());
+                var containerName = new string(Input.Email.Where(char.IsLetterOrDigit).ToArray()).ToLower();
                 var user = new User { UserName = Input.Email, Email = Input.Email,
                     FirstName = "",
                     LastName = "",
