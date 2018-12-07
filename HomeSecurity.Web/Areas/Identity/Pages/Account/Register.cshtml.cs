@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using HomeSecurity.Bll.Services;
 
 namespace HomeSecurity.Web.Areas.Identity.Pages.Account
 {
@@ -31,7 +32,7 @@ namespace HomeSecurity.Web.Areas.Identity.Pages.Account
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-           // _emailSender = emailSender;
+            // _emailSender = emailSender;
         }
 
         [BindProperty]
@@ -83,6 +84,7 @@ namespace HomeSecurity.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(

@@ -57,6 +57,8 @@ namespace HomeSecurity.Web.Pages.Azure
             // Get reference to the container
             CloudBlobContainer container = blobClient.GetContainerReference(UserManager.GetUserAsync(HttpContext.User).GetAwaiter().GetResult().ContainerId);
 
+            container.CreateIfNotExistsAsync().GetAwaiter().GetResult();
+
             BlobContinuationToken continuationToken = null;
 
             BlobResultSegment resultSegment = null;

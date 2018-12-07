@@ -56,37 +56,22 @@ namespace HomeSecurity.Bll.Services
         public async Task<List<string>> GetThumbNailUrls(string accountName, string accountKey, string thumbnailContainer)
         {
             List<string> thumbnailUrls = new List<string>();
-
-            // Create storagecredentials object by reading the values from the configuration (appsettings.json)
-            StorageCredentials storageCredentials = new StorageCredentials(accountName, accountKey);
-
-            // Create cloudstorage account by passing the storagecredentials
-            CloudStorageAccount storageAccount = new CloudStorageAccount(storageCredentials, true);
-
-            // Create blob client
+           
+            StorageCredentials storageCredentials = new StorageCredentials(accountName, accountKey);          
+            CloudStorageAccount storageAccount = new CloudStorageAccount(storageCredentials, true);   
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-            // Get reference to the container
             CloudBlobContainer container = blobClient.GetContainerReference(thumbnailContainer);
 
             BlobContinuationToken continuationToken = null;
-
             BlobResultSegment resultSegment = null;
 
-            //Call ListBlobsSegmentedAsync and enumerate the result segment returned, while the continuation token is non-null.
-            //When the continuation token is null, the last page has been returned and execution can exit the loop.
             do
             {
-                //This overload allows control of the page size. You can return all remaining results by passing null for the maxResults parameter,
-                //or by calling a different overload.
                 resultSegment = await container.ListBlobsSegmentedAsync("", true, BlobListingDetails.All, 10, continuationToken, null, null);
 
                 foreach (var blobItem in resultSegment.Results)
                 {
                     CloudBlockBlob blob = blobItem as CloudBlockBlob;
-                    //Set the expiry time and permissions for the blob.
-                    //In this case, the start time is specified as a few minutes in the past, to mitigate clock skew.
-                    //The shared access signature will be valid immediately.
                     SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy
                     {
                         SharedAccessStartTime = DateTimeOffset.UtcNow.AddMinutes(-5),
@@ -94,15 +79,10 @@ namespace HomeSecurity.Bll.Services
                         Permissions = SharedAccessBlobPermissions.Read
                     };
 
-                    //Generate the shared access signature on the blob, setting the constraints directly on the signature.
                     string sasBlobToken = blob.GetSharedAccessSignature(sasConstraints);
-
-                    //Return the URI string for the container, including the SAS token.
                     thumbnailUrls.Add(blob.Uri + sasBlobToken);
 
                 }
-
-                //Get the continuation token.
                 continuationToken = resultSegment.ContinuationToken;
             }
 
